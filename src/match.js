@@ -1,5 +1,6 @@
-// Simple scoring: count overlapping skills (with partial matches), return top 3.
+// Score mentors by overlapping skills (whole tokens, case-insensitive). Return the top 3.
 import { readFileSync } from "node:fs";
+import { normalizeSkill, skillOverlaps } from "./skills.js";
 
 const mentors = JSON.parse(
   readFileSync(new URL("./mentors.json", import.meta.url), "utf8")
@@ -14,12 +15,14 @@ export function findMentor(id) {
 }
 
 export function matchMentors(skills) {
-  if (!skills.length) return [];
+  const list = Array.isArray(skills) ? skills : typeof skills === "string" ? [skills] : [];
+  const wanted = [...new Set(list.map((skill) => normalizeSkill(skill)).filter(Boolean))];
+  if (!wanted.length) return [];
   return mentors
     .map((m) => ({
       mentor: m,
-      score: skills.filter((s) =>
-        m.skills.some((ms) => ms.includes(s) || s.includes(ms))
+      score: wanted.filter((skill) =>
+        m.skills.some((offered) => skillOverlaps(skill, offered))
       ).length,
     }))
     .filter((r) => r.score > 0)
