@@ -1,5 +1,5 @@
 import express from "express";
-import { grokReply } from "./src/grok.js";
+import { writeReply } from "./src/reply.js";
 import { extractSkills } from "./src/cerebras.js";
 import { matchMentors, allMentors, findMentor } from "./src/match.js";
 import {
@@ -24,14 +24,14 @@ if (process.env.STRIPE_SECRET_KEY?.startsWith("sk_live_")) {
 
 app.get("/api/mentors", (_req, res) => res.json(allMentors()));
 
-// Chat: Qwen on Cerebras extracts skills fast -> match -> Grok writes the reply.
+// Chat: Qwen on Cerebras extracts skills fast -> match -> Qwen on Cerebras writes the reply.
 app.post("/api/chat", async (req, res) => {
   try {
     const history = (req.body.history || []).slice(-10);
     const last = history.filter((m) => m.role === "user").at(-1)?.content || "";
     const { skills, latencyMs } = await extractSkills(last);
     const mentors = matchMentors(skills);
-    const reply = await grokReply(history, mentors);
+    const reply = await writeReply(history, mentors);
     res.json({ reply, skills, mentors, cerebrasLatencyMs: latencyMs });
   } catch (err) {
     console.error(err);

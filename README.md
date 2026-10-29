@@ -1,17 +1,17 @@
 # MentorMatch — v1 (Windows)
 
-An AI mentor marketplace that ties six tools together:
+An AI mentor marketplace that ties these tools together:
 
 | Layer | Tool | Where in the code |
 |---|---|---|
 | Design | Figma | `design/figma-brief.md` |
-| Chat bot | Grok (xAI API) | `src/grok.js` |
-| Fast matching | Qwen on Cerebras Cloud | `src/cerebras.js` |
+| Chat bot + fast matching | Qwen on Cerebras Cloud | `src/reply.js`, `src/cerebras.js` |
+| Coding assistant | Grok in Cursor (not inside the app) | — |
 | Build + extend | Claude Code on Amazon Bedrock | `AGENTS.md` |
 | Review | GitHub Copilot | `.github/copilot-instructions.md` |
 | Payments (last) | Stripe Connect, test mode | `src/stripe.js` |
 
-How a message flows: **you type → Qwen on Cerebras extracts skills (fast JSON) → match against `src/mentors.json` → Grok writes the reply → book → Stripe Checkout pays the mentor's connected account, platform keeps a fee.**
+How a message flows: **you type → Qwen on Cerebras extracts skills (fast JSON) → match against `src/mentors.json` → Qwen on Cerebras writes the reply → book → Stripe Checkout pays the mentor's connected account, platform keeps a fee.**
 
 All commands below are for **PowerShell**. Open it from the Start menu (Windows Terminal is fine).
 
@@ -62,25 +62,25 @@ git commit -m "MentorMatch v1 starter"
 
 You don't need the design to run the app — `public/` has a placeholder UI.
 
-## Step 3 — Grok API key (5 min)
+## Step 3 — Grok in Cursor (optional)
 
-1. Go to https://console.x.ai → **API Keys** → create a key.
-2. Open `.env` and paste it into `XAI_API_KEY=`.
-3. In the console's model list, copy a current Grok model ID into `GROK_MODEL=`.
+Grok is used as a coding assistant in Cursor while you build — pick it in Cursor's model selector. The app itself doesn't call Grok, so there's no xAI key to put in `.env`.
 
 ## Step 4 — Qwen on Cerebras key (5 min)
+
+Qwen on Cerebras does both jobs in the app: skill extraction and the chat reply.
 
 1. Go to https://cloud.cerebras.ai → create an API key (free tier is fine).
 2. Paste it into `CEREBRAS_API_KEY=` in `.env`.
 3. Check https://inference-docs.cerebras.ai/models and set `CEREBRAS_MODEL=` to the current Qwen model ID (Cerebras rotates models, so confirm it).
 
-**Test both keys:**
+**Test the key:**
 
 ```powershell
 npm run check
 ```
 
-You want `[OK]` for Grok and Qwen. Stripe will show `[FAIL]` until Step 8 — that's expected.
+You want `[OK]` for Qwen. Stripe will show `[FAIL]` until Step 8 — that's expected.
 
 **Run the app:**
 
@@ -88,7 +88,7 @@ You want `[OK]` for Grok and Qwen. Stripe will show `[FAIL]` until Step 8 — th
 npm run dev
 ```
 
-Open http://localhost:3000 and type: *"I want to learn Terraform on AWS"*. You should see a Grok reply, matched mentor cards, and the Cerebras latency under the chat. 🎉
+Open http://localhost:3000 and type: *"I want to learn Terraform on AWS"*. You should see a reply from Qwen, matched mentor cards, and the Cerebras latency under the chat. 🎉
 
 ## Step 5 — Claude Code on Amazon Bedrock (45 min)
 
@@ -195,7 +195,7 @@ git checkout -b fix-xss
 |---|---|
 | `node: bad option: --env-file` | Node is older than 20.6 — reinstall the LTS. |
 | `npm` "running scripts is disabled" | Run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` once. |
-| Grok/Cerebras `404 model not found` | The model ID in `.env` is outdated — copy a current one from the provider's console. |
+| Cerebras `404 model not found` | `CEREBRAS_MODEL` in `.env` is outdated — copy a current one from https://inference-docs.cerebras.ai/models. |
 | Claude Code `/status` doesn't show Bedrock | You didn't reopen PowerShell after `setx`, or `AWS_REGION` is missing. |
 | Bedrock `AccessDeniedException` | Model access form not submitted, or IAM policy missing — see Step 5a. |
 | Port 3000 in use | Set `PORT=3001` and `APP_URL=http://localhost:3001` in `.env`. |

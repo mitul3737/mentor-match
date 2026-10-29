@@ -1,14 +1,14 @@
 // Run with: npm run check
 // Pings each provider once so you know your keys and model IDs work.
-import OpenAI from "openai";
+import Cerebras from "@cerebras/cerebras_cloud_sdk";
 import Stripe from "stripe";
 
 const ok = (name, msg) => console.log(`  [OK]   ${name}: ${msg}`);
 const bad = (name, msg) => console.log(`  [FAIL] ${name}: ${msg}`);
 
-async function ping(name, baseURL, apiKey, model) {
+async function ping(name, apiKey, model) {
   try {
-    const client = new OpenAI({ apiKey, baseURL });
+    const client = new Cerebras({ apiKey });
     const t = Date.now();
     const r = await client.chat.completions.create({
       model,
@@ -21,12 +21,7 @@ async function ping(name, baseURL, apiKey, model) {
 }
 
 console.log("Checking keys...\n");
-if (process.env.XAI_API_KEY?.trim()) {
-  await ping("Grok (xAI)", "https://api.x.ai/v1", process.env.XAI_API_KEY, process.env.GROK_MODEL);
-} else {
-  console.log("  [SKIP] Grok (xAI): XAI_API_KEY is empty, chat will use Qwen on Cerebras");
-}
-await ping("Qwen (Cerebras)", "https://api.cerebras.ai/v1", process.env.CEREBRAS_API_KEY, process.env.CEREBRAS_MODEL);
+await ping("Qwen (Cerebras)", process.env.CEREBRAS_API_KEY, process.env.CEREBRAS_MODEL);
 
 const sk = process.env.STRIPE_SECRET_KEY || "";
 if (!sk.startsWith("sk_test_")) {

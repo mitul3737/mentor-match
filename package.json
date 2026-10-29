@@ -1,7 +1,7 @@
 {
   "name": "mentor-match",
   "version": "0.1.0",
-  "description": "AI mentor marketplace: Grok chat + Qwen on Cerebras matching + Stripe Connect payouts",
+  "description": "AI mentor marketplace: Qwen on Cerebras chat and matching + Stripe Connect payouts",
   "type": "module",
   "main": "server.js",
   "scripts": {
@@ -13,8 +13,8 @@
     "node": ">=20.6"
   },
   "dependencies": {
+    "@cerebras/cerebras_cloud_sdk": "^1.91.0",
     "express": "^4.21.0",
-    "openai": "^4.77.0",
     "stripe": "^17.5.0"
   }
 }
