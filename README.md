@@ -117,7 +117,7 @@ Run the steps in this order. **Grok Bot comes before Stripe; Stripe Connect is a
 ### Before the event
 - [ ] `npm test` and `npm run check` pass (Qwen and Stripe) on the demo laptop
 - [ ] `data/` folder exists (or audit item #2 is fixed)
-- [ ] Only **one** `npm run dev` running
+- [ ] No `npm run dev` is running; start it in Part 3
 - [ ] One mentor (Nadia) already onboarded to Stripe in test mode (see Part 7)
 - [ ] Grok Bot app signed in, Bot created, GitHub connected
 - [ ] Branch protection on `main` (Settings → Branches → require a pull request)
