@@ -59,7 +59,7 @@ npm run check   # want [OK] for Qwen (Cerebras)
 npm run dev     # MentorMatch running at http://localhost:3000
 ```
 
-Open http://localhost:3000 and type **"I want to learn Terraform on AWS"**. You should get a reply, the detected skills `terraform, aws`, a Cerebras latency badge, and **Nadia Rahman** as the top match. (`src/match.js` returns up to 3 mentors that share a whole word in a skill, so if Qwen also detects e.g. `devops`, Arif appears too.)
+Open http://localhost:3000 and type **"I want to learn Terraform on AWS"**. You should get a reply, the detected skills `terraform, aws`, a Cerebras latency badge, and **Nadia Rahman** as the top match. (`src/match.js` returns up to 3 mentors whose skills match the extracted skills by case-insensitive, whole-token comparison, so if Qwen also detects e.g. `devops`, Arif appears too.)
 
 ---
 
