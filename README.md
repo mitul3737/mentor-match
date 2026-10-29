@@ -76,7 +76,7 @@ Lessons from building this, so the demo goes smoothly:
 | Grok | **Grok 4.7 in Cursor Agent mode** for UI edits; **Grok Bot** (sign in with Cursor) audited the repo and pushed two fix branches | Grok Bot has no API for the app to call, so it works *on* the repo. It pushes as `cursor[bot]`, and GitHub refused its PRs ("must be a collaborator") because our Cursor team links several GitHub accounts; we opened the PRs by hand |
 | Copilot | Requested as PR reviewer on all 4 PRs; approved the XSS fix with no issues; **Copilot Autofix** committed a footer focus-colour fix | Use PR review on GitHub, not the IDE extension (clashes with Cursor) |
 | Git | Commit before letting any agent edit; one agent at a time | Running Grok and Claude Code on the same files at once can overwrite changes |
-| Ports | One terminal for `npm run dev`, one for everything else | Two `npm run dev` at once: the old one keeps port 3000 and serves stale code, so the chat says "Sorry, I encountered an error" after a `git pull` |
+| Ports | One terminal for `npm run dev`, one for everything else | Starting another copy fails with `EADDRINUSE :::3000`; stop the existing copy before restarting |
 
 ## Pull request history
 
