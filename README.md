@@ -35,6 +35,7 @@ You need **Node.js 20.6+**, **Git**, a **Cerebras API key** (free tier at [cloud
 ```powershell
 git clone https://github.com/mitul3737/mentor-match.git
 cd mentor-match
+New-Item -ItemType Directory -Force data
 npm install
 Copy-Item .env.example .env
 ```
@@ -108,7 +109,7 @@ Show `/status` (account and model) and `/mcp` (figma ✔). Then show the prompt 
 ```powershell
 $env:CLAUDE_CODE_USE_BEDROCK = "1"
 $env:AWS_REGION = "us-east-1"
-$env:AWS_BEARER_TOKEN_BEDROCK = Read-Host "Bedrock API key"
+$env:AWS_BEARER_TOKEN_BEDROCK = [System.Net.NetworkCredential]::new("", (Read-Host "Bedrock API key" -AsSecureString)).Password
 $env:ANTHROPIC_MODEL = "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
 $env:ANTHROPIC_SMALL_FAST_MODEL = "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
 claude
