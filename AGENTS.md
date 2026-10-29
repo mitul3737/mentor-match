@@ -18,7 +18,7 @@ AI mentor marketplace, v1 runs locally on Windows.
 - Never commit `.env` or print API keys.
 - Stripe must stay in test mode; the server exits on `sk_live_` keys.
 - Keep model IDs in `.env` (`CEREBRAS_MODEL`), never hard-code them.
-- Commands: `npm install`, `npm run check`, `npm run dev`.
+- Commands: `npm install`, `npm test`, `npm run check`, `npm run dev`.
 - The user is on Windows (PowerShell). Give PowerShell commands, not bash.
 
 ## Planned next steps
