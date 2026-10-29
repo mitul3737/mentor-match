@@ -38,6 +38,7 @@ cd mentor-match
 New-Item -ItemType Directory -Force data
 npm install
 Copy-Item .env.example .env
+New-Item -ItemType Directory -Force data | Out-Null
 ```
 
 Open `.env` and fill in (no quotes, no spaces around `=`):
