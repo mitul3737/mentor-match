@@ -40,37 +40,45 @@ function addMessage(role, text) {
   $('messages').scrollTop = $('messages').scrollHeight;
 }
 
+// Builds an element with text set via textContent (never parsed as HTML)
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
 // Mentor card rendering
 function renderMentorCard(mentor) {
-  const card = document.createElement('article');
-  card.className = 'mentor-card';
+  const card = el('article', 'mentor-card');
 
-  const initials = getInitials(mentor.name);
+  const avatar = el('span', 'mentor-avatar', getInitials(mentor.name));
+  avatar.setAttribute('aria-hidden', 'true');
 
-  card.innerHTML = `
-    <div class="mentor-top">
-      <div class="mentor-identity">
-        <span class="mentor-avatar" aria-hidden="true">${initials}</span>
-        <div>
-          <h3>${mentor.name}</h3>
-          <p>${mentor.title}</p>
-        </div>
-      </div>
-      <strong class="price">
-        $${mentor.priceUsd}
-        <span>/session</span>
-      </strong>
-    </div>
-    <p class="mentor-bio">${mentor.bio}</p>
-    <div class="skill-list">
-      ${mentor.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
-    </div>
-    <button class="book-button" type="button" data-id="${mentor.id}">
-      Book session <span aria-hidden="true">→</span>
-    </button>
-  `;
+  const nameBlock = el('div');
+  nameBlock.append(el('h3', '', mentor.name), el('p', '', mentor.title));
 
-  card.querySelector('.book-button').onclick = () => bookMentor(mentor.id);
+  const identity = el('div', 'mentor-identity');
+  identity.append(avatar, nameBlock);
+
+  const price = el('strong', 'price', `$${mentor.priceUsd} `);
+  price.appendChild(el('span', '', '/session'));
+
+  const top = el('div', 'mentor-top');
+  top.append(identity, price);
+
+  const skillList = el('div', 'skill-list');
+  mentor.skills.forEach((skill) => skillList.appendChild(el('span', 'skill-tag', skill)));
+
+  const arrow = el('span', '', '→');
+  arrow.setAttribute('aria-hidden', 'true');
+  const bookButton = el('button', 'book-button', 'Book session ');
+  bookButton.type = 'button';
+  bookButton.dataset.id = mentor.id;
+  bookButton.appendChild(arrow);
+  bookButton.onclick = () => bookMentor(mentor.id);
+
+  card.append(top, el('p', 'mentor-bio', mentor.bio), skillList, bookButton);
 
   return card;
 }
