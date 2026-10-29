@@ -1,0 +1,20 @@
+{
+  "name": "mentor-match",
+  "version": "0.1.0",
+  "description": "AI mentor marketplace: Grok chat + Qwen on Cerebras matching + Stripe Connect payouts",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node --env-file=.env server.js",
+    "dev": "node --watch --env-file=.env server.js",
+    "check": "node --env-file=.env scripts/check-keys.js"
+  },
+  "engines": {
+    "node": ">=20.6"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "openai": "^4.77.0",
+    "stripe": "^17.5.0"
+  }
+}

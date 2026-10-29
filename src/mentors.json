@@ -1,0 +1,8 @@
+[
+  { "id": "m1", "name": "Nadia Rahman", "title": "Cloud Engineer", "skills": ["aws", "terraform", "devops", "lambda"], "priceUsd": 15, "bio": "Builds serverless systems on AWS. Loves teaching Terraform." },
+  { "id": "m2", "name": "Arif Hossain", "title": "Kubernetes Admin", "skills": ["kubernetes", "docker", "devops", "helm"], "priceUsd": 20, "bio": "CKA certified. Runs production clusters for fintech." },
+  { "id": "m3", "name": "Tasnim Akter", "title": "ML Engineer", "skills": ["machine learning", "python", "pytorch", "mlops"], "priceUsd": 25, "bio": "Ships models to production and teaches MLOps basics." },
+  { "id": "m4", "name": "Rafi Chowdhury", "title": "Full-stack Developer", "skills": ["javascript", "react", "node", "web development"], "priceUsd": 12, "bio": "React and Node mentor for beginners building their first app." },
+  { "id": "m5", "name": "Sumaiya Islam", "title": "Product Designer", "skills": ["figma", "ui design", "ux", "design systems"], "priceUsd": 18, "bio": "Helps developers design clean interfaces in Figma." },
+  { "id": "m6", "name": "Fahim Ahmed", "title": "GenAI Developer", "skills": ["generative ai", "llm", "rag", "prompt engineering", "python"], "priceUsd": 22, "bio": "Builds LLM apps with RAG and agents." }
+]
