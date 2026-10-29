@@ -236,7 +236,7 @@ Connected account IDs are stored in `data/accounts.json` (git-ignored), so each 
 | "This mentor has not onboarded to Stripe yet" | Onboard that mentor on `/onboard.html` first |
 | Bedrock `403 ... not available for this account` | Your AWS account lacks that model; use Sonnet 4.5's `us.` profile ID |
 | Bedrock "only through an inference profile" | Add the `us.` prefix to the model ID |
-| Chat says "Sorry, I encountered an error" after `git pull` | Two `npm run dev` may be running and the old one serves stale code. Close the extra terminal, free port 3000, restart `npm run dev`. The real error is printed in the `npm run dev` terminal |
+| Chat says "Sorry, I encountered an error" after `git pull` | Check the browser DevTools Network tab and the `npm run dev` terminal for failures. Ensure only one server owns port 3000, then restart `npm run dev`. |
 | "Connect with Stripe" fails with ENOENT on `data/accounts.json` | Create the folder: `New-Item -ItemType Directory -Force data` |
 | Grok Bot: "must be a collaborator" when opening a PR | Open the PR yourself from the compare page; or give the Cursor GitHub app's installation on your account access to the repo and start a new Bot task |
 | `npm` "running scripts is disabled" | `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` |
