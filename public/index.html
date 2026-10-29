@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MentorMatch - AI Mentor Finder</title>
   <link rel="stylesheet" href="styles.css" />
+  <script>
+    (function () {
+      var params = new URLSearchParams(location.search);
+      if (params.has('paid') || params.has('cancelled')) {
+        document.documentElement.classList.add('show-payment');
+      }
+    })();
+  </script>
 </head>
 <body>
   <header class="header">
@@ -44,6 +52,9 @@
             placeholder="e.g. I want to learn Terraform on AWS"
             autocomplete="off"
           />
+          <button type="button" id="clear-chat" class="clear-chat">
+            Clear chat
+          </button>
           <button type="submit">
             Send
             <span aria-hidden="true">↗</span>
@@ -81,6 +92,19 @@
       </div>
     </aside>
   </main>
+
+  <div class="payment-page" id="payment-page">
+    <section class="result-card" aria-live="polite">
+      <div class="result-icon" id="result-icon"></div>
+      <h1 id="result-title"></h1>
+      <p id="result-message"></p>
+      <div class="booking-receipt" id="booking-receipt" hidden>
+        <span id="receipt-mentor"></span>
+        <strong id="receipt-price"></strong>
+      </div>
+      <a class="primary-button" href="/">Back to chat</a>
+    </section>
+  </div>
 
   <script src="app.js"></script>
 </body>

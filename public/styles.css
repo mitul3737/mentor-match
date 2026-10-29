@@ -318,6 +318,18 @@ input:focus-visible {
   transform: translateY(-1px);
 }
 
+.chat-input button.clear-chat {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+}
+
+.chat-input button.clear-chat:hover {
+  background: var(--bg);
+  color: var(--text);
+  transform: none;
+}
+
 .chat-input button:disabled {
   cursor: not-allowed;
   opacity: 0.45;
@@ -464,12 +476,12 @@ input:focus-visible {
 .price {
   flex: 0 0 auto;
   color: var(--text);
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .price span {
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 400;
 }
 
@@ -494,7 +506,7 @@ input:focus-visible {
   border-radius: 999px;
   background: var(--bg);
   color: #555;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 500;
 }
 
@@ -733,13 +745,22 @@ input:focus-visible {
 }
 
 .payment-page {
+  display: none;
   min-height: 100vh;
-  display: grid;
   place-items: center;
   padding: 24px;
   background:
     radial-gradient(circle at 50% 30%, rgba(79, 70, 229, 0.09), transparent 24rem),
     var(--bg);
+}
+
+html.show-payment .header,
+html.show-payment .home-layout {
+  display: none;
+}
+
+html.show-payment .payment-page {
+  display: grid;
 }
 
 .result-card {
@@ -752,29 +773,8 @@ input:focus-visible {
   text-align: center;
 }
 
-.result-switcher {
-  width: fit-content;
-  display: flex;
-  margin: 0 auto 34px;
-  padding: 3px;
-  border-radius: 999px;
-  background: var(--bg);
-}
-
-.result-switcher button {
-  padding: 6px 11px;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--muted);
-  font-size: 10px;
-  font-weight: 600;
-}
-
-.result-switcher button.active {
-  background: var(--surface);
-  color: var(--text);
-  box-shadow: 0 1px 4px rgba(28, 28, 28, 0.1);
+.booking-receipt[hidden] {
+  display: none !important;
 }
 
 .result-icon {
@@ -833,6 +833,7 @@ input:focus-visible {
   width: 100%;
   margin-top: 22px;
   padding: 12px 20px;
+  text-decoration: none;
 }
 
 @media (max-width: 1100px) {

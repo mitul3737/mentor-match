@@ -149,6 +149,7 @@ $('chat-form').onsubmit = async (e) => {
   input.value = '';
   addMessage('user', text);
   state.history.push({ role: 'user', content: text });
+  const requestId = ++chatRequest;
 
   // Update detected skills placeholder
   $('detected-skills-text').textContent = 'analyzing...';
@@ -162,6 +163,7 @@ $('chat-form').onsubmit = async (e) => {
     });
 
     const data = await res.json();
+    if (requestId !== chatRequest) return;
 
     if (data.error) {
       addMessage('assistant', `Error: ${data.error}`);
@@ -189,6 +191,7 @@ $('chat-form').onsubmit = async (e) => {
     renderMentorList(state.matchedMentors, true);
 
   } catch (error) {
+    if (requestId !== chatRequest) return;
     addMessage('assistant', 'Sorry, I encountered an error. Please try again.');
     $('detected-skills-text').textContent = 'error';
     $('latency-text').textContent = 'Cerebras: -- ms';
@@ -213,16 +216,83 @@ async function loadAllMentors() {
   }
 }
 
-// Initialize
-addMessage('assistant', "Hi! Tell me a skill, tool, or topic you want to learn and I'll find the right mentor.");
+const GREETING = "Hi! Tell me a skill, tool, or topic you want to learn and I'll find the right mentor.";
+let chatRequest = 0;
 
-// Check for payment result in URL params
-const params = new URLSearchParams(location.search);
-if (params.has('paid')) {
-  addMessage('assistant', 'Payment succeeded (test mode). Your session is confirmed!');
+const browseMatchesHTML = `
+  <div class="initial-matches">
+    <span class="initial-matches-icon" aria-hidden="true">M</span>
+    <h2 id="matches-heading">Your matches will appear here</h2>
+    <p>Tell the assistant what you want to learn</p>
+  </div>
+  <div class="browse-heading">
+    <div>
+      <span class="eyebrow">Explore the marketplace</span>
+      <h3>Browse all mentors</h3>
+    </div>
+    <span id="total-mentors-count"></span>
+  </div>
+  <div class="mentor-list" id="mentor-list"></div>
+`;
+
+function showAllMentors() {
+  $('matches-container').innerHTML = browseMatchesHTML;
+  $('total-mentors-count').textContent = state.allMentors.length
+    ? `${state.allMentors.length} mentors`
+    : 'Loading...';
+  if (state.allMentors.length) renderMentorList(state.allMentors, false);
 }
-if (params.has('cancelled')) {
-  addMessage('assistant', 'Payment cancelled. No charge was made.');
+
+function clearChat() {
+  chatRequest += 1;
+  state.history = [];
+  state.query = '';
+  state.detectedSkills = [];
+  state.matchedMentors = [];
+  state.latencyMs = null;
+  $('mentor-search').value = '';
+  $('messages').replaceChildren();
+  $('detected-skills-text').textContent = 'waiting for a skill';
+  $('latency-text').textContent = 'Cerebras: -- ms';
+  showAllMentors();
+  addMessage('assistant', GREETING);
+}
+
+$('clear-chat').onclick = clearChat;
+
+function showPaymentResult(success, mentorId) {
+  document.documentElement.classList.add('show-payment');
+  const icon = $('result-icon');
+  icon.className = `result-icon ${success ? 'success' : 'cancelled'}`;
+  icon.textContent = success ? '✓' : '✕';
+  $('result-title').textContent = success ? 'Payment successful' : 'Payment cancelled';
+  $('result-message').textContent = success
+    ? 'Payment succeeded (test mode). Your session is confirmed!'
+    : 'Payment cancelled. No charge was made.';
+
+  const receipt = $('booking-receipt');
+  receipt.hidden = true;
+  if (!mentorId) return;
+
+  fetch('/api/mentors')
+    .then((res) => res.json())
+    .then((mentors) => {
+      const mentor = mentors.find((item) => item.id === mentorId);
+      if (!mentor) return;
+      $('receipt-mentor').textContent = `Session with ${mentor.name}`;
+      $('receipt-price').textContent = `$${mentor.priceUsd}`;
+      receipt.hidden = false;
+    })
+    .catch(() => {});
+}
+
+// Initialize
+addMessage('assistant', GREETING);
+
+// Payment page: ?paid=mentorId or ?cancelled=mentorId, no result switcher.
+const params = new URLSearchParams(location.search);
+if (params.has('paid') || params.has('cancelled')) {
+  showPaymentResult(params.has('paid'), params.get('paid') || params.get('cancelled'));
 }
 
 // Load mentors
