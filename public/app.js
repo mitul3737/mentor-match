@@ -70,6 +70,9 @@ function renderMentorCard(mentor) {
   const skillList = el('div', 'skill-list');
   mentor.skills.forEach((skill) => skillList.appendChild(el('span', 'skill-tag', skill)));
 
+  const messageLink = el('a', 'message-button', 'Message mentor');
+  messageLink.href = `chat.html?mentor=${encodeURIComponent(mentor.id)}`;
+
   const arrow = el('span', '', '→');
   arrow.setAttribute('aria-hidden', 'true');
   const bookButton = el('button', 'book-button', 'Book session ');
@@ -78,7 +81,10 @@ function renderMentorCard(mentor) {
   bookButton.appendChild(arrow);
   bookButton.onclick = () => bookMentor(mentor.id);
 
-  card.append(top, el('p', 'mentor-bio', mentor.bio), skillList, bookButton);
+  const actions = el('div', 'card-actions');
+  actions.append(messageLink, bookButton);
+
+  card.append(top, el('p', 'mentor-bio', mentor.bio), skillList, actions);
 
   return card;
 }

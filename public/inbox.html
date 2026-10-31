@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mentor inbox - MentorMatch</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <a class="brand" href="/">
+      <span class="brand-mark" aria-hidden="true">M</span>
+      <span>MentorMatch</span>
+    </a>
+    <p class="tagline">Reply to mentees before they book.</p>
+    <a class="text-link" href="/">
+      <span aria-hidden="true">←</span> Back to chat
+    </a>
+  </header>
+
+  <main class="page-shell narrow-page">
+    <a class="back-link" href="/">
+      <span aria-hidden="true">←</span> Back to chat
+    </a>
+
+    <div class="page-intro">
+      <span class="eyebrow">Mentor dashboard</span>
+      <h1>Inbox</h1>
+      <p>
+        Read questions from mentees and reply before they book a session.
+        This demo has no accounts — choose which mentor you are answering as.
+      </p>
+    </div>
+
+    <nav class="dashboard-nav" aria-label="Mentor dashboard">
+      <a href="onboard.html">Payouts</a>
+      <a href="inbox.html" aria-current="page">Inbox</a>
+    </nav>
+
+    <label class="mentor-picker" for="mentor-select">
+      Replying as
+      <select id="mentor-select"></select>
+    </label>
+
+    <div class="inbox-layout">
+      <div class="conversation-list" id="conversation-list" role="list" aria-label="Mentees"></div>
+      <section class="chat-panel inbox-thread" aria-labelledby="inbox-thread-heading">
+        <header class="thread-heading">
+          <div>
+            <span class="eyebrow">Conversation</span>
+            <h2 id="inbox-thread-heading">Select a mentee</h2>
+            <p id="inbox-thread-meta"></p>
+          </div>
+        </header>
+        <div class="messages thread-log" id="thread" role="log" aria-live="polite" aria-relevant="additions" aria-label="Messages"></div>
+        <form class="composer" id="reply-form">
+          <div class="chat-input thread-composer">
+            <label class="sr-only" for="reply-text">Reply</label>
+            <textarea id="reply-text" maxlength="2000" rows="2" placeholder="Write a reply" disabled></textarea>
+            <button type="submit" id="send-reply" disabled>Send</button>
+          </div>
+          <p class="form-error" id="form-error" role="alert" hidden></p>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <script src="inbox.js"></script>
+</body>
+</html>
